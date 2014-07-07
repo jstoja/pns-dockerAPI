@@ -17,8 +17,8 @@ RUN /etc/my_init.d/00_regen_ssh_host_keys.sh
 # Use baseimage-docker's init system.
 CMD ["/sbin/my_init"]
 
-#RUN apt-get update
-#RUN apt-get -y install wget git
+RUN apt-get update
+RUN apt-get -y install wget
 
 #
 # Install Go to build platform specific application server
@@ -38,8 +38,13 @@ CMD ["/sbin/my_init"]
 #
 # RTMP server waiting for streams
 #
+WORKDIR /tmp
+RUN ["wget", "http://rtmpd.com/assets/binaries/784/crtmpserver-1.1_beta-x86_64-Ubuntu_12.04.tar.gz"]
+RUN ["tar", "xfz", "crtmpserver-1.1_beta-x86_64-Ubuntu_12.04.tar.gz", "-C", "/etc/"]
+RUN ["mv", "/etc/crtmpserver-1.1_beta-x86_64-Ubuntu_12.04", "/etc/crtmpserver"]
+RUN ["rm", "-rf", "/tmp/crtmpserver-1.1_beta-x86_64-Ubuntu_12.04"]
+
 WORKDIR /
-ADD ./scripts/crtmpserver_linux /etc/crtmpserver
 RUN ["mkdir", "-p", "/var/log/crtmpserver/"]
 VOLUME /var/log/crtmpserver
 
