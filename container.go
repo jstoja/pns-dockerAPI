@@ -1,12 +1,10 @@
 package main
 
 type ServerConfig struct {
-	id         int64
-	Name       string
-	Logfile    string
-	Configfile string
-	PortRTMP   int
-	PortFLV    int
+	Id       int64
+	Name     string
+	PortRTMP int
+	PortFLV  int
 }
 
 /*
