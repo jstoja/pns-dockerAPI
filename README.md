@@ -5,15 +5,24 @@ PlugAndStream Server API to launch Docker container at will.
 
 This little server permits to create RTMP servers by launching containers through an API.
 
-##Install the image
+##Install the image and run the server
 
 For the server to run, you need to create the Docker image on the machine running the API:
 
 ```
-➜  ~  docker build -t pns:server .
+$ git clone https://github.com/jstoja/pns-dockerAPI
+$ cd pns-dockerAPI/
+$ docker build -t pns:server .
 ```
 Note: On Windows and OSX you need to install boot2docker. [More information here...](http://docs.docker.io/en/latest/installations)
 
+Then, you need to build and run the Go application:
+
+```
+$ go build
+$ ./pns-dockerAPI
+
+```
 
 
 ##API
