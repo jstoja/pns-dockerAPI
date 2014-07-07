@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+ <meta charset="utf-8">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <title></title>
+ <meta name="description" content="">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+ <script src="http://releases.flowplayer.org/js/flowplayer-3.2.13.min.js"></script>
+</head>
+<body>
+ 
+   <div class="player" id="streams" style="width: 600px;height: 338px;">
+   </div>
+ 
+   <script type="text/javascript">
+ 
+      $f("streams", "http://releases.flowplayer.org/swf/flowplayer-3.2.18.swf", {
+      clip: {
+ 
+         url: 'livestream', 
+         live: true, 
+         autoPlay: true, 
+         provider: 'influxis',
+         scaling: 'fit'
+      },
+      plugins: {
+       influxis: {
+         url: "flowplayer.rtmp-3.2.13.swf",
+         netConnectionUrl: 'rtmp://192.168.59.103:1936/flvplayback'
+		 /*ICI Ton adresse RTMP, remplace x.x.x.x par localhost ou IP*/
+      }
+   }
+});
+ 
+ 
+ 
+   </script>
+</body>
+</html>

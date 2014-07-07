@@ -1,0 +1,20 @@
+DANS LE DOSSIER IL FAUT UN FICHIER DOCKER COMPATIBLE
+
+Le but de ce petit software serveur est d'etre lancé et d'écouter le port 3001 dans l'attente d'une demande de creation de serveur de streaming.
+
+-------    ----------    --------------
+|     |    |        |    |            |
+| web | => | server | => | container1 | 
+|     |    |        |    |            |
+-------    ----------    --------------
+					     --------------
+                         |            |
+                      => | container2 |
+                         |            |
+                         --------------
+
+							  ...
+
+
+Chaque container contient un serveur RTMPd responssable d'un stream
+L'API sera documenté ce week-end.
