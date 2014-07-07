@@ -1,14 +1,12 @@
 package main
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
 	"os/exec"
 	"strconv"
-	"text/template"
 
 	"github.com/gorilla/mux"
 )
@@ -20,38 +18,15 @@ const (
 	DOCKER_IMG   = "eip:server1"
 )
 
+type ServerConfig struct {
+	Id       int64
+	Name     string
+	PortRTMP int
+	PortFLV  int
+}
+
 var pnsEnv []ServerEnv = make([]ServerEnv, NB_SERVER)
 var maxId = int64(0)
-
-type JsonError struct {
-	code    int
-	message string
-}
-
-func AnswerError(w http.ResponseWriter, code int, message string) {
-	//b, err := json.Marshal(JsonError{1, "Server is full, please wait or take another one."})
-	b, err := json.Marshal(JsonError{code, message})
-	if err != nil {
-		w.Write([]byte("error"))
-	} else {
-		w.Write(b)
-	}
-}
-
-func putValueInTemplate(templ string, obj *ServerConfig) string {
-	//tmpl, err := template.New("run docker container").Parse("--name {{.Name}} -p 1234:{{.PortFLV}} -p 1935:{{.PortRTMP}} eip:server1")
-	tmpl, err := template.New("run docker container").Parse(templ)
-	if err != nil {
-		panic(err)
-	}
-	var docker_cmd bytes.Buffer
-	err = tmpl.Execute(&docker_cmd, obj)
-	if err != nil {
-		panic(err)
-	}
-
-	return docker_cmd.String()
-}
 
 func launch_crtmpd(id int, quit_chan chan int) {
 	portflv := putValueInTemplate("{{.PortFLV}}:1234", pnsEnv[id].config)
@@ -72,22 +47,6 @@ func launch_crtmpd(id int, quit_chan chan int) {
 	if err := cmd.Wait(); err != nil {
 		log.Fatal(err)
 	}
-
-	//log.Printf("Waiting for command to finish...")
-	//go wait_for_app(cmd, quit_chan)
-	//select {
-	//case <-quit_chan:
-	//	pnsEnv[id].del()
-	//}
-}
-
-func wait_for_app(c *exec.Cmd, quit_chan chan int) {
-	c.Wait()
-	quit_chan <- 1
-}
-
-func getPortsForId(id int) (int, int) {
-	return DEFAULT_FLV + id, DEFAULT_RTMP + id
 }
 
 /*
@@ -118,15 +77,6 @@ func new_server(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func getFirstFree() int {
-	for i, val := range pnsEnv {
-		if val.used == false {
-			return i
-		}
-	}
-	return -1
-}
-
 /*
 GET /list
 	=> json of the containers
@@ -138,15 +88,6 @@ func list_server(w http.ResponseWriter, req *http.Request) {
 		list += fmt.Sprintf("* %v\n", val.config)
 	}
 	w.Write([]byte(list))
-}
-
-func getServerConfigForId(id int64) (*ServerConfig, int64) {
-	for id_container, val := range pnsEnv {
-		if val.used == true && val.config.Id == id {
-			return val.config, int64(id_container)
-		}
-	}
-	return nil, int64(-1)
 }
 
 /*

@@ -16,6 +16,5 @@ func (self *ServerEnv) Add(name string, flv int, rtmp int) {
 
 func (self *ServerEnv) Del() {
 	self.used = false
-	close(self.server_channel)
 	self.config = nil
 }
