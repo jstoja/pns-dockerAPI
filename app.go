@@ -15,7 +15,7 @@ const (
 	NB_SERVER    = 5
 	DEFAULT_FLV  = 1234
 	DEFAULT_RTMP = 1935
-	DOCKER_IMG   = "eip:server1"
+	DOCKER_IMG   = "pns:server"
 )
 
 type ServerConfig struct {
