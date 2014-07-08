@@ -116,6 +116,18 @@ func delete_server(w http.ResponseWriter, req *http.Request) {
 	AnswerError(w, 1, "Successfuly deleted.")
 }
 
+
+func delete_all_servers() {
+
+	cmd := exec.Command("docker", "rm", "-f", "$(docker ps -a -q)")
+	err := cmd.Start()
+	if err != nil {
+		log.Printf("Can't delete. ")
+		return
+	}
+	log.Printf("Deleted all containers")
+}
+
 func main() {
 
 	//cmd := exec.Command("docker", "build", "-t", DOCKER_IMG, ".")
@@ -126,8 +138,8 @@ func main() {
 	//	log.Print("Docker image created.")
 	//}
 
+	delete_all_servers()
 	maxId = 0
-
 	r := mux.NewRouter()
 	r.HandleFunc("/new/{name}", new_server).Methods("GET")
 	r.HandleFunc("/delete/{id}", delete_server).Methods("GET")
@@ -135,4 +147,5 @@ func main() {
 	log.Printf("Listening ...")
 	http.Handle("/", r)
 	http.ListenAndServe(":3001", nil)
+
 }
