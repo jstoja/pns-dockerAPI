@@ -44,6 +44,8 @@ RUN ["tar", "xfz", "crtmpserver-1.1_beta-x86_64-Ubuntu_12.04.tar.gz", "-C", "/et
 RUN ["mv", "/etc/crtmpserver-1.1_beta-x86_64-Ubuntu_12.04", "/etc/crtmpserver"]
 RUN ["rm", "-rf", "/tmp/crtmpserver-1.1_beta-x86_64-Ubuntu_12.04"]
 
+ADD ./scripts/pns.lua /etc/crtmpserver/configs/pns.lua
+
 WORKDIR /
 RUN ["mkdir", "-p", "/var/log/crtmpserver/"]
 VOLUME /var/log/crtmpserver
