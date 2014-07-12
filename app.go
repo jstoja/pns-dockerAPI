@@ -56,14 +56,11 @@ POST /create
 */
 func new_server(w http.ResponseWriter, req *http.Request) {
 	params := mux.Vars(req)
-	log.Printf("New Server: %s", params["name"])
-	// EMPECHER 2x le meme name
 	id := getFirstFree()
+	log.Printf("New Server: %s with id: %d", params["name"], id)
 	if id == -1 {
 		AnswerError(w, -1, "Server is full, please wait or take another one.")
-		return
 	}
-
 	portflv, portrtmp := getPortsForId(id)
 	pnsEnv[id].Add(params["name"], portflv, portrtmp)
 	// VOIR SI Y'A UNE ERREUR OU PAS !
